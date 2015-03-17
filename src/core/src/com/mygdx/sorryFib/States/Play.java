@@ -39,7 +39,7 @@ public class Play extends GameState {
 	}
 
 	public void update(float dt) {
-		world.step(dt,6,2,0);
+		world.step(dt,6,2);
 	}
 
 	public void render() {
