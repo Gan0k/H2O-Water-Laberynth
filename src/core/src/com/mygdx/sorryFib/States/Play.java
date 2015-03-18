@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Color;
 
 import finnstr.libgdx.liquidfun.ParticleDebugRenderer;
+import finnstr.libgdx.liquidfun.ColorParticleRenderer;
 import finnstr.libgdx.liquidfun.ParticleDef.ParticleType;
 import finnstr.libgdx.liquidfun.ParticleGroupDef;
 import finnstr.libgdx.liquidfun.ParticleSystem;
@@ -28,9 +29,9 @@ public class Play extends GameState {
 
 	private ParticleSystem mParticleSystem;
     private ParticleDebugRenderer mParticleDebugRenderer;
+    private ColorParticleRenderer mColorParticleRenderer;
 
     private ParticleGroupDef mParticleGroupDef1;
-    private ParticleGroupDef mParticleGroupDef2;
 
 	public Play(GameStateManager gsm) {
 		super(gsm);
@@ -40,6 +41,7 @@ public class Play extends GameState {
 	
 		b2dr = new Box2DDebugRenderer();
 		mParticleDebugRenderer = new ParticleDebugRenderer(new Color(0, 0, 1, 1), mParticleSystem.getParticleCount());
+		mColorParticleRenderer = new ColorParticleRenderer(mParticleSystem.getParticleCount());
 
 		containerBox();
 	
@@ -69,7 +71,8 @@ public class Play extends GameState {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //First render the particles and then the Box2D world
-        mParticleDebugRenderer.render(mParticleSystem, B2DVars.PPM, b2dCam.combined);
+        //mParticleDebugRenderer.render(mParticleSystem, B2DVars.PPM, b2dCam.combined);
+        mColorParticleRenderer.render(mParticleSystem, B2DVars.PPM, b2dCam.combined);
         b2dr.render(world, b2dCam.combined);
     }
 
