@@ -53,7 +53,12 @@ public class Play extends GameState {
 	}
 
 	public void update(float dt) {
-		world.step(dt,6,2,0); // TODO: Add correct third parameter
+		float x = Gdx.input.getAccelerometerX();
+		x *= 9.81/10;
+		float y = Gdx.input.getAccelerometerY();
+		y *= 9.81/10;
+		world.setGravity(new Vector2(y,-x));
+		world.step(Gdx.graphics.getDeltaTime(), 10, 6, mParticleSystem.calculateReasonableParticleIterations(Gdx.graphics.getDeltaTime()));
 	}
 
 	public void render() {
@@ -62,8 +67,6 @@ public class Play extends GameState {
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        world.step(Gdx.graphics.getDeltaTime(), 10, 6, mParticleSystem.calculateReasonableParticleIterations(Gdx.graphics.getDeltaTime()));
 
         //First render the particles and then the Box2D world
         mParticleDebugRenderer.render(mParticleSystem, B2DVars.PPM, b2dCam.combined);
