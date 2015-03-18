@@ -42,8 +42,6 @@ public class Play extends GameState {
 		mParticleDebugRenderer = new ParticleDebugRenderer(new Color(0, 0, 1, 1), mParticleSystem.getParticleCount());
 
 		containerBox();
-
-		object();
 	
 		b2dCam = new OrthographicCamera();
 		b2dCam.setToOrtho(false, Game.V_WIDTH / B2DVars.PPM, Game.V_HEIGHT / B2DVars.PPM);
@@ -122,23 +120,6 @@ public class Play extends GameState {
 		body.createFixture(fdef);
 	}
 
-	private void object() {
-		BodyDef bdef = new BodyDef();
-		bdef.position.set(160 / B2DVars.PPM, 120 / B2DVars.PPM);
-		bdef.type = BodyType.DynamicBody;
-		Body body = world.createBody(bdef);
-
-		CircleShape shape = new CircleShape();
-		shape.setRadius(5.0f / B2DVars.PPM);
-		FixtureDef fdef = new FixtureDef();
-		fdef.shape = shape;
-		fdef.density = 2.5f;
-		fdef.friction = 0.25f;
-		fdef.restitution = 0.75f;
-		body.createFixture(fdef);
-		shape.dispose();
-	}
-
 	private void createParticleStuff(float width, float height) {
         //First we create a new particlesystem and 
         //set the radius of each particle to 5 / 100 m (5 cm)
@@ -167,27 +148,13 @@ public class Play extends GameState {
         mParticleGroupDef1.shape = parShape;
         mParticleSystem.createParticleGroup(mParticleGroupDef1);
 
-        //Exactly the same! This is the second group with a different
-        //color and shifted on the x-Axis
-        mParticleGroupDef2 = new ParticleGroupDef();
-        mParticleGroupDef2.shape = mParticleGroupDef1.shape;
-        mParticleGroupDef2.flags = mParticleGroupDef1.flags;
-        mParticleGroupDef2.groupFlags = mParticleGroupDef1.groupFlags;
-        mParticleGroupDef2.position.set(width / 3, height *2/3);
-        mParticleGroupDef2.color.set(0.2f, 1f, 0.3f, 1);
-        mParticleSystem.createParticleGroup(mParticleGroupDef2);
-
         //Here we create a new shape and we set a
         //linear velocity. This is used in createParticles1()
         //and createParticles2()
         CircleShape partShape = new CircleShape();
         partShape.setRadius(18.5f / B2DVars.PPM);
-
         mParticleGroupDef1.shape = partShape;
-        mParticleGroupDef2.shape = partShape;
-
         mParticleGroupDef1.linearVelocity.set(new Vector2(0, -10f));
-        mParticleGroupDef2.linearVelocity.set(new Vector2(0, -10f));
     }
 
 }

@@ -34,12 +34,8 @@ public class Game extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		accum += Gdx.graphics.getDeltaTime();
-		while (accum >= STEP) {
-			accum -= STEP;
-			gsm.update(STEP);
-			gsm.render();
-		}
+		gsm.update( Gdx.graphics.getDeltaTime());
+		gsm.render();
 	}
 
 	public void dispose() {}
