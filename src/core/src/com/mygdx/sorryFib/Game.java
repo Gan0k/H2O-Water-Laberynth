@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.mygdx.sorryFib.net.*;
 
 public class Game extends ApplicationAdapter {
 
@@ -22,15 +21,7 @@ public class Game extends ApplicationAdapter {
 	private OrthographicCamera hudCam;
 
 	private GameStateManager gsm; 
-	private MainActivityInterface mai;
-
-	public NetworkActionResolver bluetoothActionResolver;
 	
-	public Game(NetworkActionResolver bluetoothActionResolver, MainActivityInterface mai) {
-		this.bluetoothActionResolver = bluetoothActionResolver;
-		this.mai = mai;
-	}
-
 	@Override
 	public void create () {
 
@@ -48,19 +39,6 @@ public class Game extends ApplicationAdapter {
 		res.loadTexture("images/bgs.png");
 		
 		gsm = new GameStateManager(this);
-
-		if (mai.enableBluetoothQuestion()) {
-			bluetoothActionResolver.startServer();
-			bluetoothActionResolver.connect();
-			if (bluetoothActionResolver.isServer()) {
-				try {
-					bluetoothActionResolver.send(new String("wolololo"));
-				}
-				catch (NetworkException e) {
-					Gdx.app.error("NetworkException", "Can't send message.", e);
-				}
-			}
-		}
 	}
 
 	@Override
