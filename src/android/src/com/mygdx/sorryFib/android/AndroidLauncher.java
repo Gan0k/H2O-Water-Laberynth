@@ -44,9 +44,9 @@ public class AndroidLauncher extends AndroidApplication {
 		}
 	 
 		if (!mNfcAdapter.isEnabled()) {
-			Toast.makeText(this, "NFC Disabled, please enalbe it.", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "NFC Disabled, please enable.", Toast.LENGTH_LONG).show();
 		} else {
-			//everyting is fine 
+			Log.i(TAG,"NFC systems enabled!");
 		}
 
 		handleIntent(getIntent());
@@ -57,6 +57,7 @@ public class AndroidLauncher extends AndroidApplication {
 	}
 
 	private void handleIntent(Intent intent) {
+		System.out.println("WOLOLOLOLOLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 		String action = intent.getAction();
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 			String type = intent.getType();
@@ -162,7 +163,7 @@ public class AndroidLauncher extends AndroidApplication {
 	    @Override
 	    protected void onPostExecute(String result) {
 	        if (result != null) {
-	            Log.e(result, "This is the result");
+	            Log.e(TAG, result);
 	        }
 	    }
 	}
