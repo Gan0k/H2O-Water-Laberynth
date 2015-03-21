@@ -25,6 +25,7 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create () {
 
+		Gdx.input.setInputProcessor(new InputProcessor());
 
 		sb = new SpriteBatch();
 		cam = new OrthographicCamera();
@@ -38,8 +39,6 @@ public class Game extends ApplicationAdapter {
 		res.loadTexture("images/bgs.png");
 		
 		gsm = new GameStateManager(this);
-		Gdx.input.setInputProcessor(new InputProcessor(gsm));
-		Gdx.input.setCatchBackKey(true);
 	}
 
 	@Override

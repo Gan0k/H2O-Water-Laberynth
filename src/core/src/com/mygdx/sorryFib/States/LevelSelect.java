@@ -27,7 +27,13 @@ public class LevelSelect extends GameState {
 		
 	}
 	
-	public void update(float dt) {		
+	public void handleInput() {
+	}
+	
+	public void update(float dt) {
+		
+		handleInput();
+		
 		for(int row = 0; row < buttons.length; row++) {
 			for(int col = 0; col < buttons[0].length; col++) {
 				buttons[row][col].update(dt);
@@ -57,7 +63,8 @@ public class LevelSelect extends GameState {
 		
 	}
 	
-	public void handleInput() {}
-	public void dispose() {}
+	public void dispose() {
+		// everything is in the resource manager com.neet.blockbunny.handlers.Content
+	}
 	
 }
