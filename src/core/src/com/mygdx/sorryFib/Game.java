@@ -12,7 +12,8 @@ public class Game extends ApplicationAdapter {
 	public static final int V_HEIGHT = 240;
 	public static final int SCALE = 2;
 
-	public static final float STEP = 1/60f;
+	public static Content res;
+
 	private float  accum;
 
 	private SpriteBatch sb;
@@ -23,18 +24,26 @@ public class Game extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+
+		Gdx.input.setInputProcessor(new InputProcessor());
+
 		sb = new SpriteBatch();
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 		hudCam = new OrthographicCamera();
 		hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
+
+		res = new Content();
+		res.loadTexture("images/menu.png");
+		res.loadTexture("images/hud.png");
+		res.loadTexture("images/bgs.png");
 		
 		gsm = new GameStateManager(this);
 	}
 
 	@Override
 	public void render () {
-		gsm.update( Gdx.graphics.getDeltaTime());
+		gsm.update(Gdx.graphics.getDeltaTime());
 		gsm.render();
 	}
 

@@ -67,7 +67,7 @@ public class Play extends GameState {
         //First update our InputProcessor
         //this.inputUpdate(Gdx.graphics.getDeltaTime()); TODO: Create imput processor
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0f,0f,0f,0.f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //First render the particles and then the Box2D world
@@ -139,7 +139,7 @@ public class Play extends GameState {
         //Create a new particlegroupdefinition and set some properties
         //For the flags you can set more than only one
         mParticleGroupDef1 = new ParticleGroupDef();
-        mParticleGroupDef1.color.set(1f, 0, 0, 1);
+        mParticleGroupDef1.color.set(0.44313725490196076f, 0.6862745098039216f, 0.7294117647058823f, 0.9f);
         mParticleGroupDef1.flags.add(ParticleType.b2_waterParticle);
         mParticleGroupDef1.position.set(width / 2, height / 2);
 
