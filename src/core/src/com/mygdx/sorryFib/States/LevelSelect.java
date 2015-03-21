@@ -18,7 +18,8 @@ public class LevelSelect extends GameState {
 		buttons = new GameButton[2][5];
 		for(int row = 0; row < buttons.length; row++) {
 			for(int col = 0; col < buttons[0].length; col++) {
-				buttons[row][col] = new GameButton(buttonReg, Game.V_WIDTH/7 + col * Game.V_WIDTH/6,  Game.V_HEIGHT*4/6 + -row * Game.V_HEIGHT/3, cam);
+				buttons[row][col] = new GameButton(buttonReg, Game.V_WIDTH/7 + col * Game.V_WIDTH/6,  Game.V_HEIGHT*4/6 + -row * Game.V_HEIGHT/3, 
+					cam, 1.5f*buttonReg.getRegionWidth(), 1.5f*buttonReg.getRegionHeight());
 				buttons[row][col].setText(row * buttons[0].length + col + 1 + "");
 			}
 		}
