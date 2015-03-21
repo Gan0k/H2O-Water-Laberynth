@@ -57,7 +57,7 @@ public class AndroidLauncher extends AndroidApplication {
 	}
 
 	private void handleIntent(Intent intent) {
-		System.out.println("WOLOLOLOLOLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+		Log.i(TAG,Integer.toString(times));
 		String action = intent.getAction();
 		if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 			String type = intent.getType();
