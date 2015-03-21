@@ -38,7 +38,7 @@ public class LevelSelect extends GameState {
 			for(int col = 0; col < buttons[0].length; col++) {
 				buttons[row][col].update(dt);
 				if(buttons[row][col].isClicked()) {
-					//Play.level = row * buttons[0].length + col + 1;
+					Play.level = row * buttons[0].length + col + 1;
 					//Game.res.getSound("levelselect").play();
 					gsm.setState(GameStateManager.PLAY);
 				}

@@ -60,6 +60,7 @@ public class Play extends GameState {
 		b2dCam.setToOrtho(false, Game.V_WIDTH / B2DVars.PPM, Game.V_HEIGHT / B2DVars.PPM);
 
 		// create walls
+		createMargin();
 		createWalls();
 		//cam.setBounds(0, tileMapWidth * tileSize, 0, tileMapHeight * tileSize);
 	}
@@ -67,6 +68,46 @@ public class Play extends GameState {
 
 	public void handleInput() {
 
+	}
+
+	private void createMargin() {
+		BodyDef bdef = new BodyDef();
+		bdef.type = BodyType.StaticBody;
+		bdef.position.set(0,0);
+		ChainShape cs = new ChainShape();
+		Vector2[] v = new Vector2[2];
+		v[0] = new Vector2(0,0);
+		v[1] = new Vector2(0, Game.V_HEIGHT / B2DVars.PPM);
+		cs.createChain(v);
+		FixtureDef fd = new FixtureDef();
+		fd.friction = 0;
+		fd.shape = cs;
+		world.createBody(bdef).createFixture(fd);
+		v = new Vector2[2];
+		v[0] = new Vector2(0,0);
+		v[1] = new Vector2(Game.V_WIDTH / B2DVars.PPM,0);
+		cs.createChain(v);
+		fd = new FixtureDef();
+		fd.friction = 0;
+		fd.shape = cs;
+		world.createBody(bdef).createFixture(fd);
+		v = new Vector2[2];
+		v[0] = new Vector2(Game.V_WIDTH / B2DVars.PPM,Game.V_HEIGHT / B2DVars.PPM);
+		v[1] = new Vector2(Game.V_WIDTH / B2DVars.PPM,0);
+		cs.createChain(v);
+		fd = new FixtureDef();
+		fd.friction = 0;
+		fd.shape = cs;
+		world.createBody(bdef).createFixture(fd);
+		v = new Vector2[2];
+		v[0] = new Vector2(0, Game.V_HEIGHT / B2DVars.PPM);
+		v[1] = new Vector2(Game.V_WIDTH / B2DVars.PPM,Game.V_HEIGHT / B2DVars.PPM);
+		cs.createChain(v);
+		fd = new FixtureDef();
+		fd.friction = 0;
+		fd.shape = cs;
+		world.createBody(bdef).createFixture(fd);
+		cs.dispose();
 	}
 
 	private void createWalls() {
