@@ -13,6 +13,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.physics.box2d.ChainShape;
 
 import finnstr.libgdx.liquidfun.ParticleDebugRenderer;
 import finnstr.libgdx.liquidfun.ColorParticleRenderer;
@@ -23,10 +29,17 @@ import finnstr.libgdx.liquidfun.ParticleSystemDef;
 
 public class Play extends GameState {
 
+	public static int level = 1;
+
 	private World world;
 	private Box2DDebugRenderer b2dr;
 	private OrthographicCamera b2dCam;
 
+	private TiledMap tileMap;
+	private int tileMapWidth;
+	private int tileMapHeight;
+	private int tileSize;
+	private OrthogonalTiledMapRenderer tmRenderer;
 	private ParticleSystem mParticleSystem;
     private ParticleDebugRenderer mParticleDebugRenderer;
     private ColorParticleRenderer mColorParticleRenderer;
@@ -42,16 +55,78 @@ public class Play extends GameState {
 		b2dr = new Box2DDebugRenderer();
 		mParticleDebugRenderer = new ParticleDebugRenderer(new Color(0, 0, 1, 1), mParticleSystem.getParticleCount());
 		mColorParticleRenderer = new ColorParticleRenderer(mParticleSystem.getParticleCount());
-
-		containerBox();
 	
 		b2dCam = new OrthographicCamera();
 		b2dCam.setToOrtho(false, Game.V_WIDTH / B2DVars.PPM, Game.V_HEIGHT / B2DVars.PPM);
+
+		// create walls
+		createWalls();
+		//cam.setBounds(0, tileMapWidth * tileSize, 0, tileMapHeight * tileSize);
 	}
 
 
 	public void handleInput() {
 
+	}
+
+	private void createWalls() {
+		
+		// load tile map and map renderer
+		try {
+			tileMap = new TmxMapLoader().load("maps/level" + level + ".tmx");
+		}
+		catch(Exception e) {
+			System.out.println("Cannot find file: maps/level" + level + ".tmx");
+			Gdx.app.exit();
+		}
+		tileMapWidth = Integer.parseInt((tileMap.getProperties().get("width").toString()));
+		tileMapHeight = Integer.parseInt((tileMap.getProperties().get("height").toString()));
+		tileSize = Integer.parseInt((tileMap.getProperties().get("tilewidth").toString()));
+		tmRenderer = new OrthogonalTiledMapRenderer(tileMap);
+		
+		// read each of the "red" "green" and "blue" layers
+		TiledMapTileLayer layer;
+		layer = (TiledMapTileLayer) tileMap.getLayers().get("layer");
+		createBlocks(layer);
+	}
+
+	private void createBlocks(TiledMapTileLayer layer) {
+		
+		// tile size
+		float ts = layer.getTileWidth();
+		
+		// go through all cells in layer
+		for(int row = 0; row < layer.getHeight(); row++) {
+			for(int col = 0; col < layer.getWidth(); col++) {
+				
+				// get cell
+				Cell cell = layer.getCell(col, row);
+				
+				// check that there is a cell
+				if(cell == null) continue;
+				if(cell.getTile() == null) continue;
+				
+				// create body from cell
+				BodyDef bdef = new BodyDef();
+				bdef.type = BodyType.StaticBody;
+				bdef.position.set((col + 0.5f) * ts / B2DVars.PPM, (row + 0.5f) * ts / B2DVars.PPM);
+				ChainShape cs = new ChainShape();
+				Vector2[] v = new Vector2[5];
+				v[0] = new Vector2(-ts / 2 / B2DVars.PPM, -ts / 2 / B2DVars.PPM);
+				v[1] = new Vector2(-ts / 2 / B2DVars.PPM, ts / 2 / B2DVars.PPM);
+				v[2] = new Vector2(ts / 2 / B2DVars.PPM, ts / 2 / B2DVars.PPM);
+				v[3] = new Vector2(ts / 2 / B2DVars.PPM, -ts / 2 / B2DVars.PPM);
+				v[4] = new Vector2(-ts / 2 / B2DVars.PPM, -ts / 2 / B2DVars.PPM);
+				cs.createChain(v);
+				FixtureDef fd = new FixtureDef();
+				fd.friction = 0;
+				fd.shape = cs;
+				world.createBody(bdef).createFixture(fd);
+				cs.dispose();
+				
+			}
+		}
+		
 	}
 
 	public void update(float dt) {
@@ -73,57 +148,16 @@ public class Play extends GameState {
         //First render the particles and then the Box2D world
         //mParticleDebugRenderer.render(mParticleSystem, B2DVars.PPM, b2dCam.combined);
         mColorParticleRenderer.render(mParticleSystem, B2DVars.PPM, b2dCam.combined);
-        b2dr.render(world, b2dCam.combined);
+        //b2dr.render(world, b2dCam.combined);
+
+        // draw map
+        tmRenderer.setView(cam);
+		tmRenderer.render();
     }
 
 	public void dispose() {
         world.dispose();
         b2dr.dispose();
-	}
-
-	private void containerBox() {
-		// Up
-		BodyDef bdef = new BodyDef();
-		bdef.position.set(160/B2DVars.PPM, 180/B2DVars.PPM);
-		bdef.type = BodyType.StaticBody;
-		Body body = world.createBody(bdef);
-
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(100/B2DVars.PPM, 5/B2DVars.PPM);
-		FixtureDef fdef = new FixtureDef();
-		fdef.shape = shape;
-		body.createFixture(fdef);
-
-		// Down
-		bdef = new BodyDef();
-		bdef.position.set(160/B2DVars.PPM, 80/B2DVars.PPM);
-		bdef.type = BodyType.StaticBody;
-		body = world.createBody(bdef);
-
-		fdef = new FixtureDef();
-		fdef.shape = shape;
-		body.createFixture(fdef);
-
-		// Left
-		bdef = new BodyDef();
-		bdef.position.set(60/B2DVars.PPM, 130/B2DVars.PPM);
-		bdef.type = BodyType.StaticBody;
-		body = world.createBody(bdef);
-
-		fdef = new FixtureDef();
-		fdef.shape = shape;
-		shape.setAsBox(5/B2DVars.PPM, 50/B2DVars.PPM);
-		body.createFixture(fdef);
-
-		// Right
-		bdef = new BodyDef();
-		bdef.position.set(260/B2DVars.PPM, 130/B2DVars.PPM);
-		bdef.type = BodyType.StaticBody;
-		body = world.createBody(bdef);
-
-		fdef = new FixtureDef();
-		fdef.shape = shape;
-		body.createFixture(fdef);
 	}
 
 	private void createParticleStuff(float width, float height) {
