@@ -79,7 +79,7 @@ public class Menu extends GameState {
 	}
 	
 	public void dispose() {
-		// everything is in the resource manager com.neet.blockbunny.handlers.Content
+		world.dispose();
 	}
 	
 }
