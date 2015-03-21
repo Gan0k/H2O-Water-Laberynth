@@ -199,6 +199,7 @@ public class Play extends GameState {
 	public void dispose() {
         world.dispose();
         b2dr.dispose();
+        tmRenderer.dispose();
 	}
 
 	private void createParticleStuff(float width, float height) {
