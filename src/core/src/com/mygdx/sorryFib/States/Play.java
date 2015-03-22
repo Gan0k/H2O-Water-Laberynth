@@ -202,6 +202,13 @@ public class Play extends GameState {
 	}
 
 	public void update(float dt) {
+
+		if (fires.size == 0) {
+			gsm.setState(GameStateManager.WIN);
+			return;
+		}
+
+
 		float x = Gdx.input.getAccelerometerX();
 		x *= 9.81/10;
 		float y = Gdx.input.getAccelerometerY();
