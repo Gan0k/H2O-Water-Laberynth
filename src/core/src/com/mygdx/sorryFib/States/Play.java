@@ -217,7 +217,17 @@ public class Play extends GameState {
 		world.step(Gdx.graphics.getDeltaTime(), 10, 6, mParticleSystem.calculateReasonableParticleIterations(Gdx.graphics.getDeltaTime()));
 
 		// check for collisions
-		checkCollisions();
+		//checkCollisions();
+
+		for (int j = 0; j < fires.size; ++j) {
+			IntersectQueryCallback callback = new IntersectQueryCallback();
+			float range = fires.get(j).getWidth()/B2DVars.PPM;
+			world.QueryAABB(callback, fires.get(j).getPosition().x - range,
+							 		  fires.get(j).getPosition().y - range, 
+							          fires.get(j).getPosition().x + range,
+							          fires.get(j).getPosition().y + range);
+			if (callback.called) fires.removeIndex(j);
+		}
 
 		// update fires
 		for(int i = 0; i < fires.size; i++) {
