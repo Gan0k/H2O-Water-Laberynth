@@ -44,6 +44,8 @@ public class Game extends ApplicationAdapter {
 
 		res = new Content();
 		res.loadTexture("images/menu.png");
+		res.loadTexture("images/smile.png");
+		res.loadTexture("images/logo.png");
 		res.loadTexture("images/hud.png");
 		res.loadTexture("images/bgs.png");
 		res.loadTexture("images/crystal.png");

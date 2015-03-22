@@ -127,8 +127,8 @@ public class GameButton {
 
 	private void drawString2(SpriteBatch sb, String s, float x, float y) {
 		int len = s.length();
-		float xo = width/10;
-		float yo = height/10;
+		float xo = 7.5f;
+		float yo = 8;
 		for(int i = 0; i < len; i++) {
 			char c = s.charAt(i);
 			if(c == '/') c = 10;
