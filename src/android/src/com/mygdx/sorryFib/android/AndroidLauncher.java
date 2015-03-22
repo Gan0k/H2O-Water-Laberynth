@@ -104,6 +104,13 @@ public class AndroidLauncher extends AndroidApplication {
         return new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], data);
     }
 
+    private void updateUnlockedLevels (String hextag) {
+    	if (hextag.equals("")) game.levels[0] = true;
+    	else if (hextag.equals("")) game.levels[1] = true;
+    	else if (hextag.equals("")) game.levels[2] = true;
+    	//more tags here
+    }
+
 	private void resolveIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
@@ -121,11 +128,16 @@ public class AndroidLauncher extends AndroidApplication {
                 byte[] empty = new byte[0];
                 byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
                 Parcelable tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                String test = dumpTagData(tag);
+                String s = dumpTagData(tag);
+
+                updateUnlockedLevels(s);
+
+                /*
                 byte[] payload = test.getBytes();
                 NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
                 NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
                 msgs = new NdefMessage[] { msg };
+                */
             }
             // Setup the views
            // buildStringTags(msgs);
@@ -136,13 +148,17 @@ public class AndroidLauncher extends AndroidApplication {
         StringBuilder sb = new StringBuilder();
         Tag tag = (Tag) p;
         byte[] id = tag.getId();
-        sb.append("Tag ID (hex): ").append(getHex(id)).append("\n");
+        String hexid = getHex(id);
+        sb.append("Tag ID (hex): ").append(hexid).append("\n");
 
-        Toast.makeText(this, "The tag is" + getHex(id), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "The tag is" + hexid, Toast.LENGTH_LONG).show();
 
         sb.append("Tag ID (dec): ").append(getDec(id)).append("\n");
         sb.append("ID (reversed): ").append(getReversed(id)).append("\n");
 
+        return hexid;
+
+        /*
         String prefix = "android.nfc.tech.";
         sb.append("Technologies: ");
         for (String tech : tag.getTechList()) {
@@ -198,8 +214,9 @@ public class AndroidLauncher extends AndroidApplication {
                 sb.append(type);
             }
         }
-
+        
         return sb.toString();
+        */
     }
 
 
@@ -239,6 +256,7 @@ public class AndroidLauncher extends AndroidApplication {
         return result;
     }
 
+    // Not used ATM
     void buildStringTags(NdefMessage[] msgs) {
         if (msgs == null || msgs.length == 0) {
             return;
