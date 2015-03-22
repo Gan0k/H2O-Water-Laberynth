@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="16" tileheight="16" nextobjectid="6">
+ <tileset firstgid="1" name="block2" tilewidth="16" tileheight="16">
+  <image source="block2.png" width="16" height="16"/>
+ </tileset>
+ <layer name="layer" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAuYCQCk2MeufbjUkOO3aSYR4zf8ZlHTriRGra47CXFPFxupIYfSHULOeYRk04Z0dTjMo/YNIfPHmIALnuIjQNK8+RAAgDU9ABZ
+  </data>
+ </layer>
+ <objectgroup name="crystals">
+  <object id="5" x="48" y="53" width="15" height="16">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>
