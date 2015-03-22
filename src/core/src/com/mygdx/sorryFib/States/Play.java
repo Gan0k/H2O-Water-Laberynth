@@ -51,8 +51,12 @@ public class Play extends GameState {
 
 	private ParticleGroupDef mParticleGroupDef1;
 
+	private float hack;
+
 	public Play(GameStateManager gsm) {
 		super(gsm);
+
+		hack = 0.0f;
 
 		world = new World(new Vector2(0, -9.81f), true);
 		createParticleStuff(Game.V_WIDTH / B2DVars.PPM, Game.V_HEIGHT / B2DVars.PPM);
@@ -217,8 +221,15 @@ public class Play extends GameState {
 		world.step(Gdx.graphics.getDeltaTime(), 10, 6, mParticleSystem.calculateReasonableParticleIterations(Gdx.graphics.getDeltaTime()));
 
 		// check for collisions
-		//checkCollisions();
+		
+		hack += dt;
+		if (hack > 1.0f){
+			hack -= 1.0f;
+			checkCollisions();
+		}
+		
 
+		/*
 		for (int j = 0; j < fires.size; ++j) {
 			IntersectQueryCallback callback = new IntersectQueryCallback();
 			float range = fires.get(j).getWidth()/B2DVars.PPM;
@@ -234,6 +245,7 @@ public class Play extends GameState {
 		    System.out.println( (fires.get(j).getPosition().y));
 			if (callback.called) fires.removeIndex(j);
 		}
+		*/
 
 		// update fires
 		for(int i = 0; i < fires.size; i++) {
@@ -268,10 +280,9 @@ public class Play extends GameState {
 		b2dr.dispose();
 	}
 
-	//NOT USED ATM
 	private void checkCollisions() {
 		Array<Vector2> particles = mParticleSystem.getParticlePositionBuffer();
-		for (int i = 0; i < particles.size; i++) {
+		for (int i = 0; i < particles.size; i+=5) {
 			Vector2 pos = particles.get(i);
 			for (int j = 0; j < fires.size; ++j) {
 				if (contained(fires.get(j).getPosition(),particles.get(i), fires.get(j).getWidth()/B2DVars.PPM)) fires.removeIndex(j);
