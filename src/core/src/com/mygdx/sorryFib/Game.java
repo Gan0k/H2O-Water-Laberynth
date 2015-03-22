@@ -46,6 +46,7 @@ public class Game extends ApplicationAdapter {
 		res.loadTexture("images/menu.png");
 		res.loadTexture("images/hud.png");
 		res.loadTexture("images/bgs.png");
+		res.loadTexture("images/crystal.png");
 		
 		gsm = new GameStateManager(this);
 		ip.setGSM(gsm);

@@ -42,7 +42,6 @@ public class LevelSelect extends GameState {
 				if(buttons[row][col].isClicked()) {
 					Play.level = row * buttons[0].length + col + 1;
 					if (!Game.levels[row*buttons[0].length+col]) return;
-					//Game.res.getSound("levelselect").play();
 					gsm.setState(GameStateManager.PLAY);
 				}
 			}

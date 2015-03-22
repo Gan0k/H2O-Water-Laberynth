@@ -19,6 +19,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 
 import finnstr.libgdx.liquidfun.ParticleDebugRenderer;
 import finnstr.libgdx.liquidfun.ColorParticleRenderer;
@@ -34,6 +37,8 @@ public class Play extends GameState {
 	private World world;
 	private Box2DDebugRenderer b2dr;
 	private OrthographicCamera b2dCam;
+
+	private Array<Fire> fires;
 
 	private TiledMap tileMap;
 	private int tileMapWidth;
@@ -62,7 +67,7 @@ public class Play extends GameState {
 		// create walls
 		createMargin();
 		createWalls();
-		//cam.setBounds(0, tileMapWidth * tileSize, 0, tileMapHeight * tileSize);
+		createFires();		
 	}
 
 
@@ -170,6 +175,32 @@ public class Play extends GameState {
 		
 	}
 
+	private void createFires() {
+		
+		// create list of fires
+		fires = new Array<Fire>();
+		
+		MapLayer ml = tileMap.getLayers().get("crystals");
+		if(ml == null) return;
+		
+		for(MapObject mo : ml.getObjects()) {
+			BodyDef cdef = new BodyDef();
+			cdef.type = BodyType.StaticBody;
+			float x = Float.parseFloat((mo.getProperties().get("x").toString())) / B2DVars.PPM;
+			float y = Float.parseFloat((mo.getProperties().get("y").toString())) / B2DVars.PPM;
+			cdef.position.set(x, y);
+			Body body = world.createBody(cdef);
+			FixtureDef cfdef = new FixtureDef();
+			CircleShape cshape = new CircleShape();
+			cshape.setRadius(4 / B2DVars.PPM);
+			cfdef.shape = cshape;
+			//body.createFixture(cfdef).setUserData("crystal");
+			Fire c = new Fire(body);
+			fires.add(c);
+			cshape.dispose();
+		}
+	}
+
 	public void update(float dt) {
 		float x = Gdx.input.getAccelerometerX();
 		x *= 9.81/10;
@@ -177,6 +208,14 @@ public class Play extends GameState {
 		y *= 9.81/10;
 		world.setGravity(new Vector2(y,-x));
 		world.step(Gdx.graphics.getDeltaTime(), 10, 6, mParticleSystem.calculateReasonableParticleIterations(Gdx.graphics.getDeltaTime()));
+
+		// check for collisions
+		checkCollisions();
+
+		// update fires
+		for(int i = 0; i < fires.size; i++) {
+			fires.get(i).update(dt);
+		}
 	}
 
 	public void render() {
@@ -194,6 +233,11 @@ public class Play extends GameState {
         // draw map
         tmRenderer.setView(cam);
 		tmRenderer.render();
+
+		// draw fires
+		for(int i = 0; i < fires.size; i++) {
+			fires.get(i).render(sb);
+		}
     }
 
 	public void dispose() {
@@ -201,11 +245,30 @@ public class Play extends GameState {
         b2dr.dispose();
 	}
 
+	private void checkCollisions() {
+		Array<Vector2> particles = mParticleSystem.getParticlePositionBuffer();
+		for (int i = 0; i < particles.size; i++) {
+			Vector2 pos = particles.get(i);
+			for (int j = 0; j < fires.size; ++j) {
+				if (contained(fires.get(j).getPosition(),particles.get(i), fires.get(j).getWidth()/B2DVars.PPM)) fires.removeIndex(j);
+			}
+		}
+	}
+
+	private boolean contained(Vector2 fire, Vector2 part, float range) {
+		System.out.println(Float.toString(part.x) + " , " + Float.toString(part.x));
+		System.out.println(Float.toString(fire.x) + " , " + Float.toString(fire.x));
+		System.out.println(Float.toString(range/B2DVars.PPM));
+		if (part.x > fire.x-range/2 && part.x < fire.x+range/2 &&
+			part.y > fire.y-range/2 && part.y < fire.y+range/2) return true;
+		return false;
+	}
+
 	private void createParticleStuff(float width, float height) {
         //First we create a new particlesystem and 
         //set the radius of each particle to 5 / 100 m (5 cm)
         ParticleSystemDef systemDef = new ParticleSystemDef();
-        systemDef.radius = 1f / B2DVars.PPM;
+        systemDef.radius = 2f / B2DVars.PPM;
         systemDef.dampingStrength = 0.2f;
 
         mParticleSystem = new ParticleSystem(world, systemDef);
@@ -216,7 +279,7 @@ public class Play extends GameState {
         mParticleGroupDef1 = new ParticleGroupDef();
         mParticleGroupDef1.color.set(0.44313725490196076f, 0.6862745098039216f, 0.7294117647058823f, 0.9f);
         mParticleGroupDef1.flags.add(ParticleType.b2_waterParticle);
-        mParticleGroupDef1.position.set(width / 2, height / 2);
+        mParticleGroupDef1.position.set(width /4, height/4);
 
         //Create a shape, give it to the definition and
         //create the particlegroup in the particlesystem.
@@ -225,7 +288,7 @@ public class Play extends GameState {
         //The shape defines where the particles are created exactly
         //and how much are created
         PolygonShape parShape = new PolygonShape();
-        parShape.setAsBox(width * (20f / 100f) / 2f, width * (20f / 100f) / 2f);
+        parShape.setAsBox(width * (40f / 100f) / 2f, width * (40f / 100f) / 2f);
         mParticleGroupDef1.shape = parShape;
         mParticleSystem.createParticleGroup(mParticleGroupDef1);
 
