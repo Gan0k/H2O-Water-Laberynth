@@ -12,6 +12,7 @@ public class IntersectQueryCallback implements QueryCallback {
 	public boolean reportFixture(Fixture fixture) {
 		called = true;
 		this.fixture = fixture;
+		System.out.println("Position: " + fixture.getBody().getPosition());
 		return false;
 	}
 
@@ -22,8 +23,8 @@ public class IntersectQueryCallback implements QueryCallback {
 
 	@Override
 	public boolean reportParticle(ParticleSystem p, int x) {
+		System.out.println("Particle Collision!");
 		called = true;
-		this.fixture = fixture;
 		return false;
 	}
 }

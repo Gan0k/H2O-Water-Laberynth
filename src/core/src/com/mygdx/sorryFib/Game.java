@@ -60,6 +60,10 @@ public class Game extends ApplicationAdapter {
 		gsm.render();
 	}
 
+	public void updateLevel() {
+		gsm.setState(GameStateManager.LEVEL_SELECT);
+	}
+
 	public void dispose() {}
 	public void resize(int w, int h) {}
 	public void pause() {}

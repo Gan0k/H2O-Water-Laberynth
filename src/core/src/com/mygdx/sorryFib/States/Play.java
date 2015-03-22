@@ -222,10 +222,16 @@ public class Play extends GameState {
 		for (int j = 0; j < fires.size; ++j) {
 			IntersectQueryCallback callback = new IntersectQueryCallback();
 			float range = fires.get(j).getWidth()/B2DVars.PPM;
-			world.QueryAABB(callback, fires.get(j).getPosition().x - range/2,
-									  fires.get(j).getPosition().y - range/2, 
-									  fires.get(j).getPosition().x + range/2,
-									  fires.get(j).getPosition().y + range/2);
+			float w = Game.V_WIDTH / B2DVars.PPM;
+			float h = Game.V_WIDTH / B2DVars.PPM;
+			world.QueryAABB(callback,  w - 5 ,
+									   0 , 
+									   w+5,
+									   0);
+			System.out.println( (fires.get(j).getPosition().x));
+		    System.out.println( (fires.get(j).getPosition().y)); 
+		    System.out.println( (fires.get(j).getPosition().x));
+		    System.out.println( (fires.get(j).getPosition().y));
 			if (callback.called) fires.removeIndex(j);
 		}
 
@@ -262,6 +268,7 @@ public class Play extends GameState {
 		b2dr.dispose();
 	}
 
+	//NOT USED ATM
 	private void checkCollisions() {
 		Array<Vector2> particles = mParticleSystem.getParticlePositionBuffer();
 		for (int i = 0; i < particles.size; i++) {
