@@ -27,6 +27,7 @@ public class Menu extends GameState {
 	private GameButton playButton;
 	
 	private World world;
+	private Texture logo;
 	
 	public Menu(GameStateManager gsm) {
 		
@@ -37,7 +38,9 @@ public class Menu extends GameState {
 		//bg.setVector(-20, 0);
 		
 		tex = Game.res.getTexture("hud");
-		playButton = new GameButton(new TextureRegion(tex, 0, 34, 58, 27), 160, 100, cam);
+		playButton = new GameButton(new TextureRegion(tex, 0, 34, 58, 27), 160, 60, cam);
+		logo = Game.res.getTexture("logo");
+
 		
 		cam.setToOrtho(false, Game.V_WIDTH, Game.V_HEIGHT);
 		
@@ -72,6 +75,9 @@ public class Menu extends GameState {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		sb.setProjectionMatrix(cam.combined);
+		sb.begin();                  
+        sb.draw(logo, Game.V_WIDTH/12, 90);
+        sb.end();   
 		
 		// draw button
 		playButton.render(sb);

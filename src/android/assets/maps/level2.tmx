@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="16" tileheight="16" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="16" tileheight="16" nextobjectid="5">
  <tileset firstgid="1" name="block2" tilewidth="16" tileheight="16">
   <image source="block2.png" width="16" height="16"/>
  </tileset>
@@ -8,4 +8,9 @@
    eJxjYBjagJGKZmCjkTEl7sLGp4bbCdlLrnpS3DcaftjFB3P4DVUAAGD8ACk=
   </data>
  </layer>
+ <objectgroup name="crystals">
+  <object id="4" x="281" y="114" width="14" height="12">
+   <ellipse/>
+  </object>
+ </objectgroup>
 </map>

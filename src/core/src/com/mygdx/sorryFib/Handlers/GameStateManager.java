@@ -11,6 +11,7 @@ public class GameStateManager {
 	public static final int MENU = 0;
 	public static final int LEVEL_SELECT = 2;
 	public static final int PLAY = 1;
+	public static final int WIN = 3;
 
 	public GameStateManager(Game game) {
 		this.game = game;
@@ -48,6 +49,7 @@ public class GameStateManager {
 		if (state == PLAY) return new Play(this);
 		if (state == MENU) return new Menu(this);
 		if (state == LEVEL_SELECT) return new LevelSelect(this);
+		if (state == WIN) return new Win(this);
 		return null;
 	}
 

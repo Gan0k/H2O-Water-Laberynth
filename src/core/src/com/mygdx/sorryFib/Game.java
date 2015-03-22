@@ -13,6 +13,7 @@ public class Game extends ApplicationAdapter {
 	public static final int SCALE = 2;
 
 	public static Content res;
+	public static boolean[] levels;
 
 	private float  accum;
 
@@ -21,11 +22,19 @@ public class Game extends ApplicationAdapter {
 	private OrthographicCamera hudCam;
 
 	private GameStateManager gsm; 
+
+	static {
+		levels = new boolean[10];
+		for (int i = 0; i < 10; i++) levels[i] = false;
+		levels[1] = levels[0] = true;
+	}
 	
 	@Override
 	public void create () {
 
-		Gdx.input.setInputProcessor(new InputProcessor());
+		InputProcessor ip = new InputProcessor();
+		Gdx.input.setInputProcessor(ip);
+		Gdx.input.setCatchBackKey(true);
 
 		sb = new SpriteBatch();
 		cam = new OrthographicCamera();
@@ -35,10 +44,14 @@ public class Game extends ApplicationAdapter {
 
 		res = new Content();
 		res.loadTexture("images/menu.png");
+		res.loadTexture("images/smile.png");
+		res.loadTexture("images/logo.png");
 		res.loadTexture("images/hud.png");
 		res.loadTexture("images/bgs.png");
+		res.loadTexture("images/crystal.png");
 		
 		gsm = new GameStateManager(this);
+		ip.setGSM(gsm);
 	}
 
 	@Override

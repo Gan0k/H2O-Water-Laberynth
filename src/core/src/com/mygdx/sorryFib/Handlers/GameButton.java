@@ -21,6 +21,7 @@ public class GameButton {
 	
 	Vector3 vec;
 	private OrthographicCamera cam;
+	private float timeSinceCollision;
 	
 	private boolean clicked;
 	
@@ -33,9 +34,32 @@ public class GameButton {
 		this.x = x;
 		this.y = y;
 		this.cam = cam;
-		
+		timeSinceCollision = 0f;
+
 		width = reg.getRegionWidth();
 		height = reg.getRegionHeight();
+		vec = new Vector3();
+		
+		Texture tex = Game.res.getTexture("hud");
+		font = new TextureRegion[11];
+		for(int i = 0; i < 6; i++) {
+			font[i] = new TextureRegion(tex, 32 + i * 9, 16, 9, 9);
+		}
+		for(int i = 0; i < 5; i++) {
+			font[i + 6] = new TextureRegion(tex, 32 + i * 9, 25, 9, 9);
+		}
+		
+	}
+
+	public GameButton(TextureRegion reg, float x, float y, OrthographicCamera cam, float width, float height) {
+		
+		this.reg = reg;
+		this.x = x;
+		this.y = y;
+		this.cam = cam;
+		
+		this.width = width;
+		this.height = height;
 		vec = new Vector3();
 		
 		Texture tex = Game.res.getTexture("hud");
@@ -57,7 +81,8 @@ public class GameButton {
 		vec.set(Input.x, Input.y, 0);
 
 		cam.unproject(vec);
-		
+		timeSinceCollision += dt;
+		if(timeSinceCollision < 0.5f) return;
 		if(Input.isPressed() &&
 			vec.x > x - width / 2 && vec.x < x + width / 2 &&
 			vec.y > y - height / 2 && vec.y < y + height / 2) {
@@ -80,7 +105,7 @@ public class GameButton {
 
 	public void render2(SpriteBatch sb) {
 		sb.begin();
-		sb.draw(reg, x - width / 2, y - height / 2, 1.5f*width, 1.5f*height);
+		sb.draw(reg, x - width / 2, y - height / 2, width, height);
 		if(text != null) {
 			drawString2(sb, text, x, y);
 		}
@@ -102,14 +127,14 @@ public class GameButton {
 
 	private void drawString2(SpriteBatch sb, String s, float x, float y) {
 		int len = s.length();
-		float xo = len * font[0].getRegionWidth() / 4;
-		float yo = font[0].getRegionHeight() /4;
+		float xo = 7.5f;
+		float yo = 8;
 		for(int i = 0; i < len; i++) {
 			char c = s.charAt(i);
 			if(c == '/') c = 10;
 			else if(c >= '0' && c <= '9') c -= '0';
 			else continue;
-			sb.draw(font[c], x + i * 9 - xo, y - yo, width/2, height/2);
+			sb.draw(font[c], x + i * 9 - xo, y - yo, width*0.3f, height*0.3f);
 		}
 	}
 	

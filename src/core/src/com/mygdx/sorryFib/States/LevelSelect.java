@@ -18,8 +18,10 @@ public class LevelSelect extends GameState {
 		buttons = new GameButton[2][5];
 		for(int row = 0; row < buttons.length; row++) {
 			for(int col = 0; col < buttons[0].length; col++) {
-				buttons[row][col] = new GameButton(buttonReg, Game.V_WIDTH/7 + col * Game.V_WIDTH/6,  Game.V_HEIGHT*4/6 + -row * Game.V_HEIGHT/3, cam);
-				buttons[row][col].setText(row * buttons[0].length + col + 1 + "");
+				buttons[row][col] = new GameButton(buttonReg, Game.V_WIDTH/7 + col * Game.V_WIDTH/6,  Game.V_HEIGHT*4/6 + -row * Game.V_HEIGHT/3, 
+					cam, 1.5f*buttonReg.getRegionWidth(), 1.5f*buttonReg.getRegionHeight());
+				if (Game.levels[row*buttons[0].length+col]) buttons[row][col].setText(row * buttons[0].length + col + 1 + "");
+				else buttons[row][col].setText("/");
 			}
 		}
 		
@@ -39,7 +41,7 @@ public class LevelSelect extends GameState {
 				buttons[row][col].update(dt);
 				if(buttons[row][col].isClicked()) {
 					Play.level = row * buttons[0].length + col + 1;
-					//Game.res.getSound("levelselect").play();
+					if (!Game.levels[row*buttons[0].length+col]) return;
 					gsm.setState(GameStateManager.PLAY);
 				}
 			}
