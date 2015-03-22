@@ -2,5 +2,7 @@
 <resources>
 
     <string name="app_name">SorryFib</string>
-
+    <string name="no_nfc">This device does not support NFC.</string>
+    <string name="enable_nfc">NFC Disabled, please enable.</string>
+    
 </resources>
