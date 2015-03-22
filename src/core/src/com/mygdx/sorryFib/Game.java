@@ -13,6 +13,7 @@ public class Game extends ApplicationAdapter {
 	public static final int SCALE = 2;
 
 	public static Content res;
+	public static boolean[] levels;
 
 	private float  accum;
 
@@ -21,6 +22,12 @@ public class Game extends ApplicationAdapter {
 	private OrthographicCamera hudCam;
 
 	private GameStateManager gsm; 
+
+	static {
+		levels = new boolean[10];
+		for (int i = 0; i < 10; i++) levels[i] = false;
+		levels[1] = levels[0] = true;
+	}
 	
 	@Override
 	public void create () {
