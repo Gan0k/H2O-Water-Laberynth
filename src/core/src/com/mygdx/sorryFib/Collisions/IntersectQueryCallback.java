@@ -17,11 +17,13 @@ public class IntersectQueryCallback implements QueryCallback {
 
 	@Override
 	public boolean shouldQueryParticleSystem(ParticleSystem p) {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean reportParticle(ParticleSystem p, int x) {
-		return true;
+		called = true;
+		this.fixture = fixture;
+		return false;
 	}
 }
