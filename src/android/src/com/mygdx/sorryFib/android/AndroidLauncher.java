@@ -40,13 +40,13 @@ public class AndroidLauncher extends AndroidApplication {
 
         mAdapter = NfcAdapter.getDefaultAdapter(this);
 		if (mAdapter == null) {
-			Toast.makeText(this, R.string.no_nfc, Toast.LENGTH_LONG).show();
+			makeToast("This device has no NFC");
 			finish();
 			return;
 		}
 	 
 		if (!mAdapter.isEnabled()) {
-			showNFCDisabledToast();
+			makeToast("Enable the NFC");
 		} else {
 			Log.i(TAG,"NFC systems enabled!");
 		}
@@ -62,8 +62,8 @@ public class AndroidLauncher extends AndroidApplication {
 		initialize(game, config);
 	}
 
-	private void showNFCDisabledToast () {
-		Toast.makeText(this, R.string.enable_nfc, Toast.LENGTH_LONG).show();
+	private void makeToast (String s) {
+		Toast.makeText(this, s, Toast.LENGTH_LONG).show();
 	}
 
     @Override
@@ -71,7 +71,7 @@ public class AndroidLauncher extends AndroidApplication {
         super.onResume();
         if (mAdapter != null) {
             if (!mAdapter.isEnabled()) {
-                showNFCDisabledToast();
+                makeToast("Enable the NFC");
             }
             mAdapter.enableForegroundDispatch(this, mPendingIntent, null, null);
             mAdapter.enableForegroundNdefPush(this, mNdefPushMessage);
@@ -105,8 +105,9 @@ public class AndroidLauncher extends AndroidApplication {
     }
 
     private void updateUnlockedLevels (String hextag) {
-    	if (hextag.equals("")) game.levels[0] = true;
-    	else if (hextag.equals("")) game.levels[1] = true;
+    	makeToast(hextag);
+    	if (hextag.equals("9c f2 8b 35")) game.levels[2] = true;
+    	else if (hextag.equals("9c f1 49 55")) game.levels[3] = true;
     	else if (hextag.equals("")) game.levels[2] = true;
     	//more tags here
     }
